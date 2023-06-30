@@ -74,4 +74,20 @@ impl Game {
             power_up_active_timer: 0.0,
         }
     }
+
+    pub fn key_pressed(&mut self, key: Key) {
+        self.key_state = Some(key);
+        if let Some(Key::Space) = self.key_state {
+            self.bullets.push(Entity {
+                x: self.player.x,
+                y: self.players.y - 20,
+            })
+        }
+    }
+
+    pub fn key_released(&mut self, _key: Key) {
+        self.key_state = None;
+    }
 }
+
+pub fn update(&mut self, dt: f64) {}
