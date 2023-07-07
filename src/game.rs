@@ -189,7 +189,7 @@ impl Game {
 
         let mut enenmies_on_ground = 0;
         self.enemies.retain(|enemy| {
-            if enemy.y >= slef.window_height - 20.0 {
+            if enemy.y >= self.window_height - 20.0 {
                 enemies_on_ground += 1;
             }
             enemy.y < self.window_height
@@ -208,5 +208,21 @@ impl Game {
                 }
             }
         }
+
+        let bullets_clone = self.bullets.clone();
+        self.bullets = bullets_clone
+            .into_iter()
+            .enumerate()
+            .filter(|(index, _)| !bullet_indices_to_remove.contains(index))
+            .map(|(_, item)| item)
+            .collect();
+
+        let enemies_clone = self.enemies.clone();
+        self.enemies = enemies_clone
+            .into_iter()
+            .enumerate()
+            .filter(|(index, _)| !enemy_indices_to_remove.contains(index))
+            .map(|(_, item)| item)
+            .collect();
     }
 }
