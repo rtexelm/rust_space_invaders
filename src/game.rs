@@ -187,7 +187,7 @@ impl Game {
             bullet.y -= BULLET_SPEED * dt;
         }
 
-        let mut enenmies_on_ground = 0;
+        let mut enemies_on_ground = 0;
         self.enemies.retain(|enemy| {
             if enemy.y >= self.window_height - 20.0 {
                 enemies_on_ground += 1;
