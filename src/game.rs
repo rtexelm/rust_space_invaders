@@ -80,7 +80,7 @@ impl Game {
         if let Some(Key::Space) = self.key_state {
             self.bullets.push(Entity {
                 x: self.player.x,
-                y: self.players.y - 20,
+                y: self.player.y - 20,
             })
         }
     }
@@ -88,86 +88,86 @@ impl Game {
     pub fn key_released(&mut self, _key: Key) {
         self.key_state = None;
     }
-}
-
-pub fn update(&mut self, dt: f64) {
-    // Move player
-    match self.key_state {
-        Some(Key::Left) => self.player.x -= PLAYER_SPEED * dt,
-        Some(Key::Right) => self.player.x += PLAYER_SPEED * dt,
-    }
-
-    // Spawn enemy
-
-    self.enemy_spawn_timer += dt;
-    if slef.enemy_spawn_timer > 1.0 {
-        self.enemies.push(Entity {
-            x: random::<f64>() * self.window_width,
-            y: 0.0,
-        });
-        self.enemy_spawn_timer = 0;
-    }
-
-    // update bullets
-    for bullet in &mut self.bullets {
-        bullet.y -= BULLET_SPEED * dt;
-    }
-
-    // update enemies
-    for enemy in &mut self.enemies {
-        enemy.y += ENEMY_SPEED * dt;
-    }
-
-    // spawn power_ups
-    self.power_up_spawn_timer += dt;
-    if self.power_up_spawn_timer > POWERUP_SPAWN_TIME {
-        let power_up_type = if random::<f32>() < POWERUP_CHANCE {
-            PowerUpType::TripleShot
-        } else {
-            PowerUpType::SpeedBoost
-        };
-        self.power_ups.push(PowerUp {
-            x: random::<f64>() * self.window_width,
-            y: 0.0,
-            power_up_type,
-        });
-        self.power_up_spawn_timer = 0.0;
-    }
-
-    // Handle active power-up effects
-    if let Some(power_up_type) = &self.power_up_active {
-        match power_up_type {
-            PowerUpType::SpeedBoost => {
-                // The player's speed will be boosted when moving
-                match self.key_state {
-                    Some(Key::Left) => self.player.x -= PLAYER_SPEED_BOOSTED * dt,
-                    Some(Key::Right) => self.player.x += PLAYER_SPEED_BOOSTED * dt,
-                    _ => (),
-                }
-            }
-            PowerUpType::TripleShot => {
-                // The player will shoot three bullets when shooting
-                if let Some(Key::Space) = self.key_state {
-                    self.bullets.push(Entity {
-                        x: self.player.x - 10.0,
-                        y: self.player.y - 20.0,
-                    });
-                    self.bullets.push(Entity {
-                        x: self.player.x,
-                        y: self.player.y - 20.0,
-                    });
-                    self.bullets.push(Entity {
-                        x: self.player.x + 10.0,
-                        y: self.player.y - 20.0,
-                    });
-                    self.key_state = None;
-                }
-            }
+    pub fn update(&mut self, dt: f64) {
+        // Move player
+        match self.key_state {
+            Some(Key::Left) => self.player.x -= PLAYER_SPEED * dt,
+            Some(Key::Right) => self.player.x += PLAYER_SPEED * dt,
+            _ => (),
         }
-        // Decrease the active power-up timer
-        self.power_up_active_timer -= dt;
-        if self.power_up_active_timer <= 0.0 {
-            self.power_up_active = None;
+
+        // Spawn enemy
+
+        self.enemy_spawn_timer += dt;
+        if self.enemy_spawn_timer > 1.0 {
+            self.enemies.push(Entity {
+                x: random::<f64>() * self.window_width,
+                y: 0.0,
+            });
+            self.enemy_spawn_timer = 0;
+        }
+
+        // update bullets
+        for bullet in &mut self.bullets {
+            bullet.y -= BULLET_SPEED * dt;
+        }
+
+        // update enemies
+        for enemy in &mut self.enemies {
+            enemy.y += ENEMY_SPEED * dt;
+        }
+
+        // spawn power_ups
+        self.power_up_spawn_timer += dt;
+        if self.power_up_spawn_timer > POWERUP_SPAWN_TIME {
+            let power_up_type = if random::<f32>() < POWERUP_CHANCE {
+                PowerUpType::TripleShot
+            } else {
+                PowerUpType::SpeedBoost
+            };
+            self.power_ups.push(PowerUp {
+                x: random::<f64>() * self.window_width,
+                y: 0.0,
+                power_up_type,
+            });
+            self.power_up_spawn_timer = 0.0;
+        }
+
+        // Handle active power-up effects
+        if let Some(power_up_type) = &self.power_up_active {
+            match power_up_type {
+                PowerUpType::SpeedBoost => {
+                    // The player's speed will be boosted when moving
+                    match self.key_state {
+                        Some(Key::Left) => self.player.x -= PLAYER_SPEED_BOOSTED * dt,
+                        Some(Key::Right) => self.player.x += PLAYER_SPEED_BOOSTED * dt,
+                        _ => (),
+                    }
+                }
+                PowerUpType::TripleShot => {
+                    // The player will shoot three bullets when shooting
+                    if let Some(Key::Space) = self.key_state {
+                        self.bullets.push(Entity {
+                            x: self.player.x - 10.0,
+                            y: self.player.y - 20.0,
+                        });
+                        self.bullets.push(Entity {
+                            x: self.player.x,
+                            y: self.player.y - 20.0,
+                        });
+                        self.bullets.push(Entity {
+                            x: self.player.x + 10.0,
+                            y: self.player.y - 20.0,
+                        });
+                        self.key_state = None;
+                    }
+                }
+            }
+            // Decrease the active power-up timer
+            self.power_up_active_timer -= dt;
+            if self.power_up_active_timer <= 0.0 {
+                self.power_up_active = None;
+            }
         }
     }
 }
