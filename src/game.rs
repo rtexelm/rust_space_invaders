@@ -91,10 +91,13 @@ impl Game {
 }
 
 pub fn update(&mut self, dt: f64) {
+    // Move player
     match self.key_state {
         Some(Key::Left) => self.player.x -= PLAYER_SPEED * dt,
         Some(Key::Right) => self.player.x += PLAYER_SPEED * dt,
     }
+
+    // Spawn enemy
 
     self.enemy_spawn_timer += dt;
     if slef.enemy_spawn_timer > 1.0 {
