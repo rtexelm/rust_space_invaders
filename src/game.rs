@@ -80,7 +80,7 @@ impl Game {
         if let Some(Key::Space) = self.key_state {
             self.bullets.push(Entity {
                 x: self.player.x,
-                y: self.player.y - 20,
+                y: self.player.y - 20.0,
             })
         }
     }
@@ -104,7 +104,7 @@ impl Game {
                 x: random::<f64>() * self.window_width,
                 y: 0.0,
             });
-            self.enemy_spawn_timer = 0;
+            self.enemy_spawn_timer = 0.0;
         }
 
         // update bullets
@@ -169,5 +169,24 @@ impl Game {
                 self.power_up_active = None;
             }
         }
+
+        self.power_ups
+            .retain(|power_up| power_up.y < self.window_height);
+
+        let enemies_on_ground = self
+            .enemies
+            .iter()
+            .filter(|e| e.y >= self.window_height - 20.0)
+            .count();
+
+        if enemies_on_ground as i32 >= MAX_ENEMIES_ON_BOARD {
+            self.reset();
+        }
+
+        for bullet in self.bullets {
+            bullet.y -= BULLET_SPEED * dt;
+        }
+
+        let mut enenmies_on_ground = 0;
     }
 }
