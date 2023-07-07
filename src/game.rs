@@ -183,10 +183,30 @@ impl Game {
             self.reset();
         }
 
-        for bullet in self.bullets {
+        for bullet in &mut self.bullets {
             bullet.y -= BULLET_SPEED * dt;
         }
 
         let mut enenmies_on_ground = 0;
+        self.enemies.retain(|enemy| {
+            if enemy.y >= slef.window_height - 20.0 {
+                enemies_on_ground += 1;
+            }
+            enemy.y < self.window_height
+        });
+
+        let mut bullet_indices_to_remove = HashSet::new();
+        let mut enemy_indices_to_remove = HashSet::new();
+
+        for (b_index, bullet) in self.bullets.iter().enumerate() {
+            for (e_index, enemy) in self.enemies.iter().enumerate() {
+                let dx = bullet.x - enemy.x;
+                let dy = bullet.y - enemy.y;
+                if (dx * dx + dy * dy).sqrt() < 10.0 {
+                    bullet_indices_to_remove.insert(b_index);
+                    enemy_indices_to_remove.insert(e_index);
+                }
+            }
+        }
     }
 }
