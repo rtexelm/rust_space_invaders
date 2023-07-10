@@ -283,4 +283,42 @@ impl Game {
             );
         }
     }
+
+    pub fn reset(&mut self) {
+        self.player = Entity {
+            x: self.window_width / 2.0,
+            y: self.window_height - 20.0,
+        };
+        self.bullets.clear();
+        self.enemies.clear();
+        self.enemy_spawn_timer = 0.0;
+    }
+}
+
+pub fn main() {
+    let (width, height) = (800, 800);
+    let mut window: PistonWindow = WindowSettings::new("Space Invaders", (width, height))
+        .exit_on_esc(true)
+        .build()
+        .unwrap();
+
+    let mut game = Game::new(width as f64, height as f64);
+
+    while let Some(e) = window.next() {
+        if let Some(Button::Keyboard(key)) = e.press_args() {
+            game.key_pressed(key);
+        }
+
+        if let Some(Button::Keyboard(key)) = e.release_args() {
+            game.key_released(key);
+        }
+
+        if let Some(update_args) = e.update_args() {
+            game.update(update_args.dt);
+        }
+
+        window.draw_2d(&e, |c, g, _| {
+            game.draw(&c, g);
+        });
+    }
 }
