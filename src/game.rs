@@ -225,4 +225,62 @@ impl Game {
             .map(|(_, item)| item)
             .collect();
     }
+
+    pub fn draw(&self, c: &Context, g: &mut G2d) {
+        clear([0.0, 0.0, 0.0, 0.1], g);
+
+        // draw player
+
+        let (player_x, player_y) = (self.player.x, self.player.y);
+        rectangle(
+            PLAYER_COLOR,
+            [player_x, player_y - 10.0, 20.0, 20.0],
+            c.transform,
+            g,
+        );
+        rectangle(
+            PLAYER_COLOR,
+            [player_x - 20.0, player_y - 10.0, 20.0, 20.0],
+            c.transform,
+            g,
+        );
+        // draw bullets
+        for bullet in &self.bullets {
+            let (bullet_x, bullet_y) = (bullet.x, bullet.y);
+            rectangle(
+                BULLET_COLOR,
+                [bullet_x - 2.0, bullet_y - 10.0, 4.0, 20.0],
+                c.transform,
+                g,
+            );
+        }
+
+        // draw enemies
+        for enemy in &self.enemies {
+            let (enemy_x, enemy_y) = (enemy.x, enemy.y);
+            rectangle(
+                ENEMY_COLOR,
+                [enemy_x - 10.0, enemy_y - 10.0, 20.0, 20.0],
+                c.transform,
+                g,
+            );
+        }
+
+        // draw power-ups
+        for power_up in &self.power_ups {
+            let (power_up_x, power_up_y) = (power_up.x, power_up.y);
+            rectangle(
+                POWERUP_COLOR,
+                [power_up_x - 10.0, power_up_y - 10.0, 20.0, 20.0],
+                c.transform,
+                g,
+            );
+            rectangle(
+                POWERUP_COLOR,
+                [power_up_x + 10.0, power_up_y - 10.0, 20.0, 20.0],
+                c.transform,
+                g,
+            );
+        }
+    }
 }
